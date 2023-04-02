@@ -2,3 +2,5 @@
 *.hex
 forum
 pwm
+overlap/flash.sh
+period/flash.sh
