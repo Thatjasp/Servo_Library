@@ -7,9 +7,11 @@ if len(sys.argv) != 3:
 file_name = os.path.splitext(sys.argv[1])[0]
 com_output = sys.argv[2]
 
-os.system(f'avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -o {file_name}.o {file_name}.c')
+os.system(f'avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -I../../include -o {file_name}.o {file_name}.c')
 
-os.system(f'avr-gcc -mmcu=atmega328p {file_name}.o -o {file_name}')
+os.system(f'avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -I../../include -o basic_wiring.o ../basic_wiring.c')
+
+os.system(f'avr-gcc -mmcu=atmega328p {file_name}.o basic_wiring.o -o {file_name}')
 
 os.system(f'avr-objcopy -O ihex -R .eeprom {file_name} {file_name}.hex')
 

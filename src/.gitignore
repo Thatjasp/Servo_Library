@@ -3,4 +3,9 @@
 forum
 pwm
 overlap/flash.sh
+overlap/*.o
+overlap/*.hex
 period/flash.sh
+period/*.o
+period/*.hex
+
