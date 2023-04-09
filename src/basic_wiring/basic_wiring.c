@@ -53,7 +53,10 @@ void set_pin_output(uint8_t pin) {
 	uint8_t bitmask = pin_to_bitmask(pin);
 	uint8_t port = pin_to_port(pin);
 	volatile uint8_t *reg;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 	reg = port_mode_register(port);
+#pragma GCC diagnostic pop
 	*reg |= bitmask;
 }
 void write_pin(uint8_t pin, uint8_t val) {
@@ -62,9 +65,10 @@ void write_pin(uint8_t pin, uint8_t val) {
 	volatile uint8_t *out;
 
 	if (port == NOT_A_PORT) return;
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 	out = port_mode_output(port);
-
+#pragma GCC diagnostic pop
 	if (val == LOW) {
 		*out &= ~bitmask;
 	} else {

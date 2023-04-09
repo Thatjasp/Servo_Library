@@ -1,11 +1,14 @@
-#ifndef ARDUINO_PINS
-#define ARDUINO_PINS
+#ifndef BASIC_WIRING_H
+#define BASIC_WIRING_H
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 //#define _BV(bit)	(1UL << (bit))
 // From the ArduinoCore-avr github
+
 #define pin_to_port(PIN) ( pgm_read_byte( pin_to_port_PGM + (PIN) ))
 #define pin_to_bitmask(PIN) ( pgm_read_byte( pin_to_bit_mask_PGM + (PIN) ))
+
+
 #define port_mode_register(PIN) ( (volatile uint8_t *) pgm_read_byte( port_to_mode_PGM + (PIN) ))
 #define port_mode_output(PIN) ( (volatile uint8_t *) pgm_read_byte( port_to_output_PGM + (PIN) ))
 #define NOT_A_PORT 0
