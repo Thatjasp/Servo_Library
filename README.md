@@ -143,4 +143,9 @@ const uint16_t PROGMEM port_to_output_PGM[] = {
 };
 ```
 
+# References Used
 
+https://electronics.stackexchange.com/questions/206876/how-to-control-multiple-servo-motors-using-two-timers
+https://github.com/arduino/ArduinoCore-avr/blob/9f8d27f09f3bbd1da1374b5549a82bda55d45d44/variants/standard/pins_arduino.h
+https://github.com/chiefenne/ATTINY85-Servo-Control/blob/master/main.c
+https://electronics.stackexchange.com/questions/337931/how-can-i-control-a-servo-motor-with-the-pwm-output-of-a-microcontroller
