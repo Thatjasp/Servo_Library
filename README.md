@@ -40,8 +40,7 @@ These are basic wiring functions that are implemented almost exactly like the Ar
 | write_pin (uint8_t pin, uint8_t val) | Writes HIGH or LOW to pin|
 
 ## Demo
-The Code used in the video 
-// Youtube url
+The code used in the [demo](https://www.youtube.com/watch?v=L5e-ptMNdWE)
 ```c
 #include "servo.h"
 #include "basic_wiring.h"
