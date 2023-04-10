@@ -78,6 +78,7 @@ The Servos use PWM to control the position. Each pulse has a duty cycle of 2.5% 
 
 ![image](img/PWM_Implementation.png)
 
+![state_machine](img/State_machine.png)
 In this implementaion the timer is in CTC mode (Clear Timer on Compare) and is used to bit bang a pwm signal on whichever pin is selected. First it will turn on the first pin attached and change the timer to interrupt when the pin needs to be turned off. When the interrupt is entered to turn off the pin, the next pin attached will start and change the timer until it needs to be turned off. This process is repeated until the last servo attached is turned off. On the falling edge of the last servo, the timer is cleared and changed to wait the difference between the time it took to bit bang the signals and 20ms. This is done to make sure that the first signal gets it's 20ms period. Afterwards it cycles back to the first step.
 
 ### Basic Wiring
