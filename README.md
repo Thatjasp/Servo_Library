@@ -79,11 +79,20 @@ The Servos use PWM to control the position. Each pulse has a duty cycle of 2.5% 
 ![image](img/PWM_Implementation.png)
 
 ![state_machine](img/State_machine.png)
-In this implementaion the timer is in CTC mode (Clear Timer on Compare) and is used to bit bang a pwm signal on whichever pin is selected. First it will turn on the first pin attached and change the timer to interrupt when the pin needs to be turned off. When the interrupt is entered to turn off the pin, the next pin attached will start and change the timer until it needs to be turned off. This process is repeated until the last servo attached is turned off. On the falling edge of the last servo, the timer is cleared and changed to wait the difference between the time it took to bit bang the signals and 20ms. This is done to make sure that the first signal gets it's 20ms period. Afterwards it cycles back to the first step.
+In this implementaion the timer is in CTC mode (Clear Timer on Compare) and is used to bit bang a pwm signal on whichever pin is selected. 
+- First it will turn on the first pin attached and change the timer to interrupt when the pin needs to be turned off. 
+- When the ISR is entered to turn off the pin, the next pin attached will start and change the timer until it needs to be turned off. This process is repeated until the last servo attached is turned off. 
+- On the falling edge of the last servo, the timer is cleared and changed to wait the difference between the time it took to bit bang the signals and 20ms. This is done to make sure that the first signal gets it's 20ms period. 
+- Afterwards it cycles back to the first step.
 
 ### Basic Wiring
 The basic wiring functions mainly came from the Arduino-core library on github. These functions implementations are done by having a look up array stored in program/flash memory that corresponds to their respective pin and port addresses. These look up tables are used in functions like `write_pin()` to correspond Arduino pins to their respective pins and ports on the ATMEGA microcontroller.
 ```c
+#define port_mode_register(PIN) ( (volatile uint8_t *) pgm_read_byte( port_to_mode_PGM + (PIN) ))
+#define port_mode_output(PIN) ( (volatile uint8_t *) pgm_read_byte( port_to_output_PGM + (PIN) ))
+#define pin_to_port(PIN) ( pgm_read_byte( pin_to_port_PGM + (PIN) ))
+#define pin_to_bitmask(PIN) ( pgm_read_byte( pin_to_bit_mask_PGM + (PIN) ))
+
 const uint16_t PROGMEM pin_to_bit_mask_PGM[] = {
         _BV(0), //PD
         _BV(1),
