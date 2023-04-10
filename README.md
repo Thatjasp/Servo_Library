@@ -73,11 +73,62 @@ int main(void) {
 
 ## Implementation Details
 
-### PWM 
+### PWM Servo Control
+The Servos use PWM to control the position. Each pulse has a duty cycle of 2.5% to 12.5% at 50Hz. Due to having a maximum of 12.5% duty cycle, it is possible to overlap multiple different signals on one timer, having a maximum of 8. 
+
+In this implementaion the timer is in CTC mode (Clear Timer on Compare) and is used to bit bang a pwm signal on whichever pin is selected. First it will turn on the first pin attached and change the timer to interrupt when the pin needs to be turned off. When the interrupt is entered to turn off the pin, the next pin attached will start and change the timer until it needs to be turned off. This process is repeated until the last servo attached is turned off. On the falling edge of the last servo, the timer is cleared and changed to wait the difference between the time it took to bit bang the signals and 20ms. This is done to make sure that the first signal gets it's 20ms period. Afterwards it cycles back to the first step.
 
 ### Basic Wiring
+The basic wiring functions mainly came from the Arduino-core library on github. These functions implementations are done by having a look up array stored in program/flash memory that corresponds to their respective pin and port addresses. These look up tables are used in functions like `write_pin()` to correspond Arduino pins to their respective pins and ports on the ATMEGA microcontroller.
+```c
+const uint16_t PROGMEM pin_to_bit_mask_PGM[] = {
+        _BV(0), //PD
+        _BV(1),
+        _BV(2),
+        _BV(3),
+        _BV(4),
+        _BV(5),
+        _BV(6),
+        _BV(7),
+        _BV(0), // PB index 8
+        _BV(1),
+        _BV(2),
+        _BV(3),
+        _BV(4),
+        _BV(5)
+};
 
-## Problems faces:
-- Fixing bug in which set_angle math did not work due to uint16_t having limited space.
-- Figuring out how Math for PWM clock Servo Library
+const uint8_t PROGMEM pin_to_port_PGM[] = {
+        PD,//PD is defined as 4
+        PD,
+        PD,
+        PD,
+        PD,
+        PD,
+        PD,
+        PD,
+        PB,//PB is defined as 2
+        PB,
+        PB,
+        PB,
+        PB,
+        PB
+};
+
+const uint16_t PROGMEM port_to_mode_PGM[] = {
+        NOT_A_PORT,
+        NOT_A_PORT,
+        (uint16_t) &DDRB,
+        (uint16_t) &DDRC,
+        (uint16_t) &DDRD,
+};
+const uint16_t PROGMEM port_to_output_PGM[] = {
+        NOT_A_PORT,
+        NOT_A_PORT,
+        (uint16_t) &PORTB,
+        (uint16_t) &PORTC,
+        (uint16_t) &PORTD,
+};
+```
+
 
